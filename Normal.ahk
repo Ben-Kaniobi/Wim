@@ -5,25 +5,25 @@
 ; Mode change
 ; ----------------------------------------------------------------
 
-v::GoSub, wim_switchTo_Visual
+v::Gosub, wim_switchTo_Visual
 
 a::
     Send, {Right}
-    GoSub, wim_switchTo_Insert
+    Gosub, wim_switchTo_Insert
 return
 
 +A::
     Send, {End}
-    GoSub, wim_switchTo_Insert
+    Gosub, wim_switchTo_Insert
 return
 
 i::
-    GoSub, wim_switchTo_Insert
+    Gosub, wim_switchTo_Insert
 return
 
 +I::
     Send, {Home}
-    GoSub, wim_switchTo_Insert
+    Gosub, wim_switchTo_Insert
 return
 
 

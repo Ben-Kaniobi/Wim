@@ -5,8 +5,8 @@
 ; Mode change
 ; ----------------------------------------------------------------
 
-; When we already are in normal or visual mode, we can also use Esc without modifier
-Esc::GoSub, wim_switchTo_Normal
+; When we already are in normal or Visual mode, we can also use Esc without modifier
+Esc::Gosub, wim_switchTo_Normal
 
 
 ; ----------------------------------------------------------------

@@ -5,13 +5,13 @@
 ; Mode change
 ; ----------------------------------------------------------------
 
-v::GoSub, wim_switchTo_Normal
+v::Gosub, wim_switchTo_Normal
 
-~LButton::GoSub, wim_switchTo_Normal
+~LButton::Gosub, wim_switchTo_Normal
 
-~MButton::GoSub, wim_switchTo_Normal
+~MButton::Gosub, wim_switchTo_Normal
 
-~RButton::GoSub, wim_switchTo_Normal
+~RButton::Gosub, wim_switchTo_Normal
 
 
 ; ----------------------------------------------------------------

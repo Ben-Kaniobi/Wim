@@ -42,7 +42,7 @@ return
 ; ----------------------------------------------------------------
 
 ; Add/remove count digit and display the count as tray tool tip
-wim_handleCount(x) {
+wim_handleCount( x ) {
     global wim_count
     if(x >= 0) {
         ; Add digit
@@ -87,14 +87,14 @@ wim_useCount() {
 ; Init
 ; ----------------------------------------------------------------
 
-GoSub, wim_switchTo_Insert
+Gosub, wim_switchTo_Insert
 
 
 ; ----------------------------------------------------------------
 ; Global hotkeys
 ; ----------------------------------------------------------------
 
-#Esc::GoSub, wim_switchTo_Normal
+#Esc::Gosub, wim_switchTo_Normal
 
 
 ; ----------------------------------------------------------------

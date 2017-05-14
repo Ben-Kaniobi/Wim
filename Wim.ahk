@@ -18,7 +18,6 @@ wim_switchTo_Insert:
     global wim_mode
     wim_useCount()  ; Reset count
     Menu, Tray, Icon, icons/I.ico
-    Send, {Shift up}
     wim_mode := "INSERT"
 return
 
@@ -27,7 +26,6 @@ wim_switchTo_Normal:
     wim_useCount()  ; Reset count
     Send, {Left}
     Menu, Tray, Icon, icons/N.ico
-    Send, {Shift up}
     wim_mode := "NORMAL"
 return
 
@@ -35,7 +33,6 @@ wim_switchTo_Visual:
     global wim_mode
     wim_useCount()  ; Reset count
     Menu, Tray, Icon, icons/V.ico
-;    Send, {Shift down}  ; TODO: Buggy
     wim_mode := "VISUAL"
 return
 

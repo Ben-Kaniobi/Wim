@@ -27,6 +27,47 @@ return
 return
 
 
+; ----------------------------------------------------------------
+; Movement
+; ----------------------------------------------------------------
+
+h::
+    count := wim_useCount()
+    Send, {Left %count%}
+return
+
+j::
+    count := wim_useCount()
+    Send, {Down %count%}
+return
+
+k::
+    count := wim_useCount()
+    Send, {Up %count%}
+return
+
+l::
+    count := wim_useCount()
+    Send, {Right %count%}
+return
+
+; TODO: ^^
+
+$::
+    Send, {End}
+    Send, {Left}
+    wim_useCount()  ; Reset count
+return
+
+; TODO: gg
+
++G::
+    Send, ^{End}
+    Send, {Home}
+    wim_useCount()  ; Reset count
+return
+
+
 ; TODO others
 
 

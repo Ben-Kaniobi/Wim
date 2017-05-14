@@ -1,0 +1,12 @@
+The copyright holder of the original Vim logo image is wikipedia user D0ktorz
+( https://commons.wikimedia.org/wiki/User:D0ktorz ). The image is licenced under
+the GNU General Public License, see LICENSE.txt for the full license text.
+
+The Wim logo was created using the Vim logo from https://en.wikipedia.org/wiki/File:Vimlogo.svg
+and changing the V into a W. The file was converted from SVG to PNG.
+
+Version used: 2015-07-26T19:08 by RyDroid
+( Direct link: https://upload.wikimedia.org/wikipedia/commons/archive/9/9f/20150726190850%21Vimlogo.svg )
+
+Original/first version: 2006-09-30T10:43 by D0ktorz
+( Direct link: https://upload.wikimedia.org/wikipedia/commons/archive/9/9f/20060930104905%21Vimlogo.svg )

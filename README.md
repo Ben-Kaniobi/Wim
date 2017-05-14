@@ -3,6 +3,8 @@ Wim
 
 Vim-like keyboard shortcuts for Windows, using [AutoHotkey](https://www.autohotkey.com/).
 
+<a href="./img"><img src="./img/logo.png" height="200"></a>
+
 
 How to use
 ==========

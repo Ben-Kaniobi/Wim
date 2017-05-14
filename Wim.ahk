@@ -1,11 +1,16 @@
 #if  ; Global context
 #SingleInstance force
 
+wim_init( "." )
+
+return  ; End of auto-execution section
+
 
 ; ----------------------------------------------------------------
 ; List of global variables
 ; ----------------------------------------------------------------
 
+; wim_dir:      Directory where Wim.ahk is located
 ; wim_mode:     Currently active mode ("INSERT"/"NORMAL"/"VISUAL")
 ; wim_count:    Number that can be used before a command
 
@@ -17,7 +22,7 @@
 wim_switchTo_Insert:
     global wim_mode
     wim_useCount()  ; Reset count
-    Menu, Tray, Icon, icons/I.ico
+    Menu, Tray, Icon, %wim_dir%/icons/I.ico
     wim_mode := "INSERT"
 return
 
@@ -25,14 +30,14 @@ wim_switchTo_Normal:
     global wim_mode
     wim_useCount()  ; Reset count
     Send, {Left}
-    Menu, Tray, Icon, icons/N.ico
+    Menu, Tray, Icon, %wim_dir%/icons/N.ico
     wim_mode := "NORMAL"
 return
 
 wim_switchTo_Visual:
     global wim_mode
     wim_useCount()  ; Reset count
-    Menu, Tray, Icon, icons/V.ico
+    Menu, Tray, Icon, %wim_dir%/icons/V.ico
     wim_mode := "VISUAL"
 return
 
@@ -40,6 +45,20 @@ return
 ; ----------------------------------------------------------------
 ; Functions
 ; ----------------------------------------------------------------
+
+; Init Wim
+wim_init( dir ) {
+    global wim_dir
+    if(wim_dir != "") {
+        ; Init already executed, don't do it again
+        return
+    }
+    if(dir == "") {
+        dir := "."
+    }
+    wim_dir := dir
+    Gosub, wim_switchTo_Insert
+}
 
 ; Add/remove count digit and display the count as tray tool tip
 wim_handleCount( x ) {
@@ -83,12 +102,6 @@ wim_useCount() {
     return count
 }
 
-; ----------------------------------------------------------------
-; Init
-; ----------------------------------------------------------------
-
-Gosub, wim_switchTo_Insert
-
 
 ; ----------------------------------------------------------------
 ; Global hotkeys
@@ -105,6 +118,8 @@ Gosub, wim_switchTo_Insert
 #include Insert.ahk
 #include Visual.ahk
 #include NormalOrVisual.ahk
+; Change include dir back to the main script dir (if the user included Wim.ahk from another script)
+#include %A_ScriptDir%
 
 
 #if  ; Global context

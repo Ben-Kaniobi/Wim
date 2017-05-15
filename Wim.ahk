@@ -1,18 +1,37 @@
 #if  ; Global context
 #SingleInstance force
 
-wim_init( "." )
 
-return  ; End of auto-execution section
+; ----------------------------------------------------------------
+; Init / auto-execute section
+; ----------------------------------------------------------------
+
+SetWorkingDir %A_ScriptDir%
+
+Gosub, wim_getConfig
+
+; Register the hotkey for switching to Normal mode using the variable from the config
+Hotkey, %wim_config_EscModifier%Esc, wim_switchTo_Normal
+
+; Start in Insert mode
+Gosub, wim_switchTo_Insert
+
+return  ; End of auto-execute section
 
 
 ; ----------------------------------------------------------------
 ; List of global variables
 ; ----------------------------------------------------------------
 
-; wim_dir:      Directory where Wim.ahk is located
 ; wim_mode:     Currently active mode ("INSERT"/"NORMAL"/"VISUAL")
 ; wim_count:    Number that can be used before a command
+
+
+; ----------------------------------------------------------------
+; List of global config variables read from INI file
+; ----------------------------------------------------------------
+
+; wim_config_EscModifier:       Modifier for switching to Normal mode with {Esc}
 
 
 ; ----------------------------------------------------------------
@@ -22,7 +41,7 @@ return  ; End of auto-execution section
 wim_switchTo_Insert:
     global wim_mode
     wim_useCount()  ; Reset count
-    Menu, Tray, Icon, %wim_dir%/icons/I.ico
+    Menu, Tray, Icon, icons/I.ico
     wim_mode := "INSERT"
 return
 
@@ -30,35 +49,27 @@ wim_switchTo_Normal:
     global wim_mode
     wim_useCount()  ; Reset count
     Send, {Left}
-    Menu, Tray, Icon, %wim_dir%/icons/N.ico
+    Menu, Tray, Icon, icons/N.ico
     wim_mode := "NORMAL"
 return
 
 wim_switchTo_Visual:
     global wim_mode
     wim_useCount()  ; Reset count
-    Menu, Tray, Icon, %wim_dir%/icons/V.ico
+    Menu, Tray, Icon, icons/V.ico
     wim_mode := "VISUAL"
+return
+
+; Read ini file and save each config value to the corresponding global variable
+wim_getConfig:
+    global wim_config_EscModifier
+    IniRead, wim_config_EscModifier, config.ini, default, EscModifier
 return
 
 
 ; ----------------------------------------------------------------
 ; Functions
 ; ----------------------------------------------------------------
-
-; Init Wim
-wim_init( dir ) {
-    global wim_dir
-    if(wim_dir != "") {
-        ; Init already executed, don't do it again
-        return
-    }
-    if(dir == "") {
-        dir := "."
-    }
-    wim_dir := dir
-    Gosub, wim_switchTo_Insert
-}
 
 ; Add/remove count digit and display the count as tray tool tip
 wim_handleCount( x ) {
@@ -104,22 +115,16 @@ wim_useCount() {
 
 
 ; ----------------------------------------------------------------
-; Global hotkeys
-; ----------------------------------------------------------------
-
-#Esc::Gosub, wim_switchTo_Normal
-
-
-; ----------------------------------------------------------------
 ; Modes
 ; ----------------------------------------------------------------
+
+; Set include dir to script dir
+#include %A_ScriptDir%
 
 #include Normal.ahk
 #include Insert.ahk
 #include Visual.ahk
 #include NormalOrVisual.ahk
-; Change include dir back to the main script dir (if the user included Wim.ahk from another script)
-#include %A_ScriptDir%
 
 
 #if  ; Global context

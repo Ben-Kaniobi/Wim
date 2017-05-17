@@ -1,4 +1,4 @@
-#if (wim_mode == "NORMAL") || (wim_mode == "VISUAL")
+#if !wim_ignore && ((wim_mode == "NORMAL") || (wim_mode == "VISUAL"))
 
 
 ; ----------------------------------------------------------------

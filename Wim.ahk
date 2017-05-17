@@ -16,6 +16,9 @@ Hotkey, %wim_config_EscModifier%Esc, wim_switchTo_Normal
 ; Start in Insert mode
 Gosub, wim_switchTo_Insert
 
+; Start timer for handling ignored windows
+SetTimer, wim_handleIgnoredWindows, 250
+
 return  ; End of auto-execute section
 
 
@@ -23,8 +26,9 @@ return  ; End of auto-execute section
 ; List of global variables
 ; ----------------------------------------------------------------
 
-; wim_mode:     Currently active mode ("INSERT"/"NORMAL"/"VISUAL")
+; wim_mode:     String of currently active mode ("INSERT"/"NORMAL"/"VISUAL")
 ; wim_count:    Number that can be used before a command
+; wim_ignore:   Boolean indicator if currently active window is ignored
 
 
 ; ----------------------------------------------------------------
@@ -32,6 +36,7 @@ return  ; End of auto-execute section
 ; ----------------------------------------------------------------
 
 ; wim_config_EscModifier:       Modifier for switching to Normal mode with {Esc}
+; wim_config_IgnoredWindows:    Array of windows where hotkeys are disabled
 
 
 ; ----------------------------------------------------------------
@@ -60,10 +65,41 @@ wim_switchTo_Visual:
     wim_mode := "VISUAL"
 return
 
+wim_handleIgnoredWindows:
+    global wim_ignore
+    wim_ignore_old := wim_ignore
+    wim_ignore := wim_isExeFromListActive()
+    if(!wim_ignore_old && wim_ignore) {
+        Menu, Tray, Icon, icons/X.ico
+    }
+    else if(wim_ignore_old && !wim_ignore) {
+        ; Restore icon
+        if(wim_mode == "INSERT") {
+            Menu, Tray, Icon, icons/I.ico
+        }
+        if(wim_mode == "NORMAL") {
+            Menu, Tray, Icon, icons/N.ico
+        }
+        if(wim_mode == "VISUAL") {
+            Menu, Tray, Icon, icons/V.ico
+        }
+    }
+return
+
 ; Read ini file and save each config value to the corresponding global variable
 wim_getConfig:
     global wim_config_EscModifier
     IniRead, wim_config_EscModifier, config.ini, default, EscModifier
+    
+    global wim_config_IgnoredWindows
+    IniRead, iniVal, config.ini, default, IgnoredWindows
+    if(iniVal == "") {
+        ; No ignore windows specified in config, timer not needed
+        SetTimer, wim_handleIgnoredWindows, Off
+    }
+    else {
+        wim_config_IgnoredWindows := StrSplit( iniVal, ",", "`r`n`t ""'``" )
+    }
 return
 
 
@@ -111,6 +147,16 @@ wim_useCount() {
     wim_count := 0
     TrayTip
     return count
+}
+
+; Check if the executable of the currently active window is on the ignore list
+wim_isExeFromListActive() {
+    global wim_config_IgnoredWindows
+    isExeActive := false
+    Loop % wim_config_IgnoredWindows.Length() {
+        isExeActive |= WinActive("ahk_exe " . wim_config_IgnoredWindows[A_Index])
+    }
+    return isExeActive
 }
 
 

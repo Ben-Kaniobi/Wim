@@ -53,7 +53,7 @@ return
 wim_switchTo_Normal:
     global wim_mode
     wim_useCount()  ; Reset count
-    Send, {Left}
+    wim_moveOnSameLine("Left")
     Menu, Tray, Icon, icons/N.ico
     wim_mode := "NORMAL"
 return
@@ -157,6 +157,30 @@ wim_isExeFromListActive() {
         isExeActive |= WinActive("ahk_exe " . wim_config_IgnoredWindows[A_Index])
     }
     return isExeActive
+}
+
+; Move text cursor left/right while avoiding wrapping to previous/next line
+wim_moveOnSameLine(direction) {
+    if((direction != "Left") && (direction != "Right")) {
+        return
+    }
+    caretY := A_CaretY
+    if(caretY == "") {
+        ; No text cursor present, don't move
+        return
+    }
+    else {
+        Send, {%direction%}
+    }
+    if(A_CaretY != caretY) {
+        ; Text cursor wrapped to another line, reverse
+        if(direction == "Left") {
+            Send, {Right}
+        }
+        else {  ; direction == "Right"
+            Send, {Left}
+        }
+    }
 }
 
 

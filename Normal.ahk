@@ -8,7 +8,7 @@
 v::Gosub, wim_switchTo_Visual
 
 a::
-    Send, {Right}
+    wim_moveOnSameLine("Right")
     Gosub, wim_switchTo_Insert
 return
 
@@ -55,7 +55,7 @@ return
 
 $::
     Send, {End}
-    Send, {Left}
+    wim_moveOnSameLine("Left")
     wim_useCount()  ; Reset count
 return
 

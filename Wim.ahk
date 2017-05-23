@@ -17,7 +17,7 @@ Hotkey, %wim_config_EscModifier%Esc, wim_switchTo_Normal
 Gosub, wim_switchTo_Insert
 
 ; Start timer for handling ignored windows
-SetTimer, wim_handleIgnoredWindows, 250
+SetTimer, wim_handleWindows, 250
 
 return  ; End of auto-execute section
 
@@ -65,23 +65,26 @@ wim_switchTo_Visual:
     wim_mode := "VISUAL"
 return
 
-wim_handleIgnoredWindows:
+wim_handleWindows:
     global wim_ignore
-    wim_ignore_old := wim_ignore
-    wim_ignore := wim_isExeFromListActive()
-    if(!wim_ignore_old && wim_ignore) {
-        Menu, Tray, Icon, icons/X.ico
-    }
-    else if(wim_ignore_old && !wim_ignore) {
-        ; Restore icon
-        if(wim_mode == "INSERT") {
-            Menu, Tray, Icon, icons/I.ico
+    ; Handle ignored windows
+    {
+        wim_ignore_old := wim_ignore
+        wim_ignore := wim_isExeFromListActive()
+        if(!wim_ignore_old && wim_ignore) {
+            Menu, Tray, Icon, icons/X.ico
         }
-        if(wim_mode == "NORMAL") {
-            Menu, Tray, Icon, icons/N.ico
-        }
-        if(wim_mode == "VISUAL") {
-            Menu, Tray, Icon, icons/V.ico
+        else if(wim_ignore_old && !wim_ignore) {
+            ; Restore icon
+            if(wim_mode == "INSERT") {
+                Menu, Tray, Icon, icons/I.ico
+            }
+            if(wim_mode == "NORMAL") {
+                Menu, Tray, Icon, icons/N.ico
+            }
+            if(wim_mode == "VISUAL") {
+                Menu, Tray, Icon, icons/V.ico
+            }
         }
     }
 return
@@ -89,13 +92,13 @@ return
 ; Read ini file and save each config value to the corresponding global variable
 wim_getConfig:
     global wim_config_EscModifier
-    IniRead, wim_config_EscModifier, config.ini, default, EscModifier
+    IniRead, wim_config_EscModifier, config.ini, default, EscModifier, +
     
     global wim_config_IgnoredWindows
-    IniRead, iniVal, config.ini, default, IgnoredWindows
+    IniRead, iniVal, config.ini, default, IgnoredWindows, %A_Space%
     if(iniVal == "") {
         ; No ignore windows specified in config, timer not needed
-        SetTimer, wim_handleIgnoredWindows, Off
+        SetTimer, wim_handleWindows, Off
     }
     else {
         wim_config_IgnoredWindows := StrSplit( iniVal, ",", "`r`n`t ""'``" )

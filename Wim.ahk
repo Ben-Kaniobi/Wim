@@ -87,6 +87,22 @@ wim_handleWindows:
             }
         }
     }
+    ; Handle text cursor (using insert-key mode which has do be changed in each application separately)
+    if(wim_changeTextCursor) {
+        insert_enabled := GetKeyState( "Insert", "T" )  ; TODO: Function is not application specifig while the key mode is
+        if((wim_mode == "NORMAL") || (wim_mode == "VISUAL")) {
+            ; Enable insert-key mode
+            if(!insert_enabled) {
+                Send, {Insert}
+            }
+        }
+        else {  ; wim_mode == "INSERT"
+            ; Disable insert-key mode
+            if(insert_enabled) {
+                Send, {Insert}
+            }
+        }
+    }
 return
 
 ; Read ini file and save each config value to the corresponding global variable
@@ -96,13 +112,14 @@ wim_getConfig:
     
     global wim_config_IgnoredWindows
     IniRead, iniVal, config.ini, default, IgnoredWindows, %A_Space%
-    if(iniVal == "") {
-        ; No ignore windows specified in config, timer not needed
-        SetTimer, wim_handleWindows, Off
-    }
-    else {
+    if(iniVal != "") {
         wim_config_IgnoredWindows := StrSplit( iniVal, ",", "`r`n`t ""'``" )
     }
+    
+    global wim_changeTextCursor
+    IniRead, iniVal, config.ini, default, ChangeTextCursor, false
+    StringLower, iniVal, iniVal
+    wim_changeTextCursor := (iniVal == "true")
 return
 
 

@@ -53,7 +53,9 @@ return
 wim_switchTo_Normal:
     global wim_mode
     wim_useCount()  ; Reset count
-    wim_moveOnSameLine("Left")
+    if(wim_mode != "NORMAL") {
+        wim_moveOnSameLine("Left")
+    }
     Menu, Tray, Icon, icons/N.ico
     wim_mode := "NORMAL"
 return

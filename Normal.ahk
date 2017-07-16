@@ -51,6 +51,16 @@ l::
     Send, {Right %count%}
 return
 
+w::
+    count := wim_useCount()
+    Send, ^{Right %count%}
+return
+
+b::
+    count := wim_useCount()
+    Send, ^{Left %count%}
+return
+
 ; TODO: ^^
 
 $::
@@ -68,7 +78,19 @@ return
 return
 
 
-; TODO others
+; ----------------------------------------------------------------
+; Others
+; ----------------------------------------------------------------
+
+u::Send, ^z
+
+^r::Send, ^y
+
+/::
+    Send, ^f
+    ; We change to insert mode so the user can instantly input text
+    Gosub, wim_switchTo_Insert
+return
 
 
 #if  ; Global context

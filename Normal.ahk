@@ -26,6 +26,19 @@ return
     Gosub, wim_switchTo_Insert
 return
 
+o::
+    Send, {End}
+    Send, {Enter}
+    Gosub, wim_switchTo_Insert
+return
+
++O::
+    Send, {Home}
+    Send, {Enter}
+    Send, {Up}
+    Gosub, wim_switchTo_Insert
+return
+
 
 ; ----------------------------------------------------------------
 ; Movement

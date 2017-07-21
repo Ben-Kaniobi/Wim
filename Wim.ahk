@@ -40,11 +40,15 @@ return  ; End of auto-execute section
 
 
 ; ----------------------------------------------------------------
-; Subroutines
+; Subroutines for switching mode
 ; ----------------------------------------------------------------
 
 wim_switchTo_Insert:
     global wim_mode
+    global wim_ignore
+    if(wim_ignore) {
+        return
+    }
     wim_useCount()  ; Reset count
     Menu, Tray, Icon, icons/I.ico
     wim_mode := "INSERT"
@@ -52,6 +56,10 @@ return
 
 wim_switchTo_Normal:
     global wim_mode
+    global wim_ignore
+    if(wim_ignore) {
+        return
+    }
     wim_useCount()  ; Reset count
     if(wim_mode != "NORMAL") {
         wim_moveOnSameLine("Left")
@@ -62,10 +70,19 @@ return
 
 wim_switchTo_Visual:
     global wim_mode
+    global wim_ignore
+    if(wim_ignore) {
+        return
+    }
     wim_useCount()  ; Reset count
     Menu, Tray, Icon, icons/V.ico
     wim_mode := "VISUAL"
 return
+
+
+; ----------------------------------------------------------------
+; Other subroutines
+; ----------------------------------------------------------------
 
 wim_handleWindows:
     global wim_ignore

@@ -8,6 +8,9 @@
 
 SetWorkingDir %A_ScriptDir%
 
+; Create empty array
+wim_insertIDs := Object()
+
 Gosub, wim_getConfig
 
 ; Register the hotkey for switching to Normal mode using the variable from the config
@@ -26,9 +29,10 @@ return  ; End of auto-execute section
 ; List of global variables
 ; ----------------------------------------------------------------
 
-; wim_mode:     String of currently active mode ("INSERT"/"NORMAL"/"VISUAL")
-; wim_count:    Number that can be used before a command
-; wim_ignore:   Boolean indicator if currently active window is ignored
+; wim_mode:         String of currently active mode ("INSERT"/"NORMAL"/"VISUAL")
+; wim_count:        Number that can be used before a command
+; wim_ignore:       Boolean indicator if currently active window is ignored
+; wim_insertIDs:    Array with key (HWND) and value (true) of windows that have the insert key mode active
 
 
 ; ----------------------------------------------------------------
@@ -89,17 +93,20 @@ wim_handleWindows:
     }
     ; Handle text cursor (using insert-key mode which has do be changed in each application separately)
     if(wim_changeTextCursor) {
-        insert_enabled := GetKeyState( "Insert", "T" )  ; TODO: Function is not application specifig while the key mode is
+        WinGet, active_window, ID, A
+        insert_enabled := wim_isInsertKeyModeActive(active_window)
         if((wim_mode == "NORMAL") || (wim_mode == "VISUAL")) {
             ; Enable insert-key mode
             if(!insert_enabled) {
                 Send, {Insert}
+                wim_setInsertKeyModeActive(active_window, !insert_enabled)
             }
         }
         else {  ; wim_mode == "INSERT"
             ; Disable insert-key mode
             if(insert_enabled) {
                 Send, {Insert}
+                wim_setInsertKeyModeActive(active_window, !insert_enabled)
             }
         }
     }
@@ -200,6 +207,29 @@ wim_moveOnSameLine(direction) {
         else {  ; direction == "Right"
             Send, {Left}
         }
+    }
+}
+
+; Check if the current window has insert key mode active
+wim_isInsertKeyModeActive(active_window) {
+    global wim_insertIDs
+    isInsertKeyModeActive := wim_insertIDs[active_window]
+    if(isInsertKeyModeActive != true) {
+        isInsertKeyModeActive := false
+    }
+    return isInsertKeyModeActive
+}
+
+; Set/reset insert key mode for active window active
+wim_setInsertKeyModeActive(active_window, set) {
+    global wim_insertIDs
+    if(set) {
+        ; Mode enabled
+        wim_insertIDs[active_window] := true
+    }
+    else {  ; reset
+        ; Mode disabled
+        wim_insertIDs.Delete(active_window)
     }
 }
 

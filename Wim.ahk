@@ -92,7 +92,7 @@ wim_handleWindows:
         }
     }
     ; Handle text cursor (using insert-key mode which has do be changed in each application separately)
-    if(wim_changeTextCursor) {
+    if(wim_changeTextCursor && wim_isText()) {
         WinGet, active_window, ID, A
         insert_enabled := wim_isInsertKeyModeActive(active_window)
         if((wim_mode == "NORMAL") || (wim_mode == "VISUAL")) {
@@ -223,6 +223,9 @@ wim_isInsertKeyModeActive(active_window) {
 ; Set/reset insert key mode for active window active
 wim_setInsertKeyModeActive(active_window, set) {
     global wim_insertIDs
+    if(!wim_isText()) {
+        return
+    }
     if(set) {
         ; Mode enabled
         wim_insertIDs[active_window] := true
@@ -231,6 +234,12 @@ wim_setInsertKeyModeActive(active_window, set) {
         ; Mode disabled
         wim_insertIDs.Delete(active_window)
     }
+}
+
+; Check if current focus is on a text field
+wim_isText() {
+    ; If current focus is on text, then the caret variable is set, else empty
+    return (A_CaretX != "")
 }
 
 

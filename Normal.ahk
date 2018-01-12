@@ -90,6 +90,11 @@ return
     wim_useCount()  ; Reset count
 return
 
+^Enter::
+    count := wim_useCount()
+    Send, {Down %count%}
+return
+
 
 ; ----------------------------------------------------------------
 ; Others
@@ -104,6 +109,18 @@ u::Send, ^z
     ; We change to insert mode so the user can instantly input text
     Gosub, wim_switchTo_Insert
 return
+
+Enter::
+    caretY := A_CaretY
+    if(caretY == "") {
+        ; No text cursor present, in that special case still send enter key to be able to interract with windows
+        Send, {Enter}
+    }
+    else {
+        count := wim_useCount()
+        Send, {Down %count%}
+    }
+Return
 
 
 #if  ; Global context

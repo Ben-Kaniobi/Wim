@@ -58,13 +58,3 @@
 *Space::return
 ~*^Space::return
 ~*!Space::return
-
-; Variations of Enter, except ctrl or alt variation
-*Enter::return
-~*^Enter::return
-~*!Enter::return
-
-; Variations of Delete, except ctrl or alt variation
-*Delete::return
-~*^Delete::return
-~*!Delete::return

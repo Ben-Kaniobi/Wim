@@ -49,11 +49,15 @@ h::
     Send, {Left %count%}
 return
 
+-::
+NumpadSub::
 j::
     count := wim_useCount()
     Send, {Down %count%}
 return
 
++::
+NumpadAdd::
 k::
     count := wim_useCount()
     Send, {Up %count%}
@@ -104,13 +108,21 @@ u::Send, ^z
 
 ^r::Send, ^y
 
+.::
+NumpadDot::
+    count := wim_useCount()
+    Send, {Del %count%}
+return
+
 /::
+NumpadDiv::
     Send, ^f
     ; We change to insert mode so the user can instantly input text
     Gosub, wim_switchTo_Insert
 return
 
 Enter::
+NumpadEnter::
     caretY := A_CaretY
     if(caretY == "") {
         ; No text cursor present, in that special case still send enter key to be able to interract with windows
@@ -120,7 +132,7 @@ Enter::
         count := wim_useCount()
         Send, {Down %count%}
     }
-Return
+return
 
 
 #if  ; Global context

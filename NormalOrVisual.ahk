@@ -30,7 +30,19 @@ Esc::Gosub, wim_switchTo_Normal
 7::wim_handleCount(7)
 8::wim_handleCount(8)
 9::wim_handleCount(9)
+Numpad0::wim_handleCount(0)
+Numpad1::wim_handleCount(1)
+Numpad2::wim_handleCount(2)
+Numpad3::wim_handleCount(3)
+Numpad4::wim_handleCount(4)
+Numpad5::wim_handleCount(5)
+Numpad6::wim_handleCount(6)
+Numpad7::wim_handleCount(7)
+Numpad8::wim_handleCount(8)
+Numpad9::wim_handleCount(9)
+
 $Delete::
+NumpadDel::
     if(wim_count == 0) {
         Send, {Delete}
     }
